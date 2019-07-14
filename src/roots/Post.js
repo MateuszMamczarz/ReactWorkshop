@@ -1,39 +1,32 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 
-class Post extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.fetchPost();
-        this.state = {
-            post: null,
+const fetchPost = (id, setPost) => {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then((response) => {
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            throw new Error(response.statusText);
         }
-    }
+    }).then((post) => {
+        setPost(post);
+    }).catch((error) => {
+        console.error(error);
+    });
+};
 
-    fetchPost = async () => {
-        await fetch(`https://jsonplaceholder.typicode.com/posts/${this.props.match.params.id}`).then((response) => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                throw new Error(response.statusText);
-            }
-        }).then((post) => {
-            this.setState({ post });
-            console.log(post);
-            return post;
-        }).catch((error) => {
-            console.error(error);
-        });
-    }
+const Post = (props) => {
+    const id = props.match.params.id;
+    const [post, setPost] = useState(null);
+    useEffect(() => {
+        fetchPost(id, setPost);
+    }, [id]);
 
-    render() {
-        const { post } = this.state;
-        return post ? (
-            <div>
-                <h2>{post.title}</h2>
-                <span>{post.body}</span>
-            </div>
-        ) : <div>Loading</div>
-    }
+    return post ? (
+        <div>
+            <h2>{post.title}</h2>
+            <span>{post.body}</span>
+        </div>
+    ) : <div>Loading</div>
 }
 
 export default Post;
