@@ -8,6 +8,7 @@ import Home from './roots/Home';
 import Author from './roots/Author';
 import Contact from './roots/Contact';
 import Header from './components/Header';
+import Post from './roots/Post';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -15,6 +16,7 @@ ReactDOM.render(
         <Route exact path="/" component={Home} />
         <Route path="/author" component={Author} />
         <Route path="/contact" component={Contact} />
+        <Route path='/post/:id' component={Post} />
     </BrowserRouter>,
     document.getElementById('root'));
 
